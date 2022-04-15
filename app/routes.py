@@ -1,13 +1,34 @@
 from app import app
 from flask import render_template, redirect, url_for
-from app.forms import AddForm, DeleteForm, SearchForm, PopulationFilterForm, StudentRegistrationForm, BusinessRegistrationForm, ListingForm
+from app.forms import AddForm, DeleteForm, SearchForm, PopulationFilterForm, StudentRegistrationForm, BusinessRegistrationForm, ListingForm, ProfileForm, JobHistoryForm, ReferencesForm
 from app import db
-from app.models import City, User, Listing
+from app.models import City, User, Listing, Profile, JobHistory, Reference
 import sys
 
 @app.route('/')
 def hello():
     return render_template('homepage.html')
+
+@app.route('/profile', methods=['GET', 'POST'])
+def profile():
+    profileForm = ProfileForm()
+    referencesForm = ReferencesForm()
+    jobHistoryForm = JobHistoryForm()
+
+    if profileForm.validate_on_submit():
+        phoneNumber = profileForm.phoneNumber.data
+        contactEmail = profileForm.contactEmail.data
+        highSchool = profileForm.highSchool.data
+        university = profileForm.university.data
+        introduction = profileForm.introduction.data
+
+        profile = Profile(studentId=3, phoneNumber=phoneNumber, contactEmail=contactEmail, highSchool=highSchool, university=university, introduction=introduction)
+        db.session.add(profile)
+        db.session.commit()
+        return redirect(url_for('hello'))
+    return render_template('profile.html', profileForm= ProfileForm())
+
+
 
 @app.route('/add_listing', methods=['GET', 'POST'])
 def add_listing():

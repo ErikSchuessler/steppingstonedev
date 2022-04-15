@@ -1,6 +1,10 @@
 from app import db
 from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+#from sqlalchemy.orm import declarative_base
+#from sqlalchemy.orm import relationship
+from wtforms_alchemy import ModelForm, ModelFieldList
+from wtforms.fields import FormField
+
 
 # Define the DB schema
 class City(db.Model):
@@ -37,12 +41,13 @@ class Profile(db.Model):
     __tablename__='Profiles'
     id = db.Column(db.Integer, primary_key=True)
     studentId = db.Column(db.Integer, ForeignKey('Users.id'), nullable=False)
-    phoneNum = db.Column(db.String(64), nullable=True)
+    phoneNumber = db.Column(db.String(64), nullable=True)
     contactEmail = db.Column(db.String(64), unique=False, nullable=True)
     highSchool = db.Column(db.String(150), unique=False, nullable=True)
     university = db.Column(db.String(150), unique=False, nullable=True) 
     introduction = db.Column(db.Text, nullable=True)
 
+   
     def __repr__(self):
         return f"{self.id}, {self.studentId}"
 
@@ -56,7 +61,7 @@ class JobHistory(db.Model):
     endDate = db.Column(db.Date, unique=False, nullable=True)
     description = db.Column(db.Text, unique=False, nullable=True)
 
-class References(db.Model):
+class Reference(db.Model):
     __tablename__='References'
     id = db.Column(db.Integer, primary_key=True)
     profileId = db.Column(db.Integer, ForeignKey('Profiles.id'), nullable=False)
