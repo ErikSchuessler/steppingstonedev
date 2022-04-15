@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Registration</h2>
+    <form action='/student_registration'>
+        <input type="submit" value="Register as Student" />
+    </form>
+    <form action='/business_registration'>
+        <input type="submit" value="Register as Business" />
+    </form>
+{% endblock %}

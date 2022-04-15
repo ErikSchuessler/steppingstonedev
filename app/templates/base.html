@@ -5,28 +5,44 @@
           border: 1px solid black;
           border-collapse: collapse;
         }
+        h1, h2, h3 {
+          font-family: Helvetica
+        }
         th, td {
           padding: 5px;
         }
         th {
           text-align: left;
         }
+        input[type='password'] {
+          font-family: Verdana;
+          letter-spacing: 0.125em;
+        }
+        .center {
+          text-align: center;
+        }
         </style>
-        <title>City population app</title>
+        <title>Stepping Stone</title>
     </head>
 
     <body>
-        <h1 style=color:red>Populations of cities </h1>
+      <div class="center">
+        <h1 style=color:black>Stepping Stone</h1>
+        <h3 style=color:black>Connecting students with career opportunities</h3>
         <hr>
         <div>
           <a href="/view_all">View All</a>
           <a href="/sort_by_name">Sort by name</a>
-          <a href="/add">Add city</a>
           <a href="/delete">Delete city</a>
           <a href="/search">Search city</a>
           <a href="/filter_population">Filter by population</a>
+          <a href="/registration">Registration</a>
+          <a href="/add_listing">Add Listing</a>
+          <a href="/profile">Profile</a>
         </div>
+      
         <hr>
         {% block content %}{% endblock %}
+      </div>
     </body>
 </html>

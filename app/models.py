@@ -37,44 +37,50 @@ class Profile(db.Model):
     __tablename__='Profiles'
     id = db.Column(db.Integer, primary_key=True)
     studentId = db.Column(db.Integer, ForeignKey('Users.id'), nullable=False)
-    studentPhoneNum = db.Column(db.String, nullable=True)
-    studentContactEmail = db.Column(db.String(64), unique=False, nullable=True)
-    studentHighSchool = db.Column(db.String(150), unique=False, nullable=True)
-    studentUni = db.Column(db.String(150), unique=False, nullable=True) 
-
+    phoneNum = db.Column(db.String(64), nullable=True)
+    contactEmail = db.Column(db.String(64), unique=False, nullable=True)
+    highSchool = db.Column(db.String(150), unique=False, nullable=True)
+    university = db.Column(db.String(150), unique=False, nullable=True) 
     introduction = db.Column(db.Text, nullable=True)
-
-    jobOneName = db.Column(db.String(150), unique=False, nullable=True)
-    jobOneDescrip = db.Column(db.Text, nullable=True)
-
-    jobTwoName = db.Column(db.String(150), unique=False, nullable=True)
-    jobTwoDescrip = db.Column(db.Text, nullable=True)
-
-    jobThreeName = db.Column(db.String(150), unique=False, nullable=True)
-    jobThreeDescrip = db.Column(db.Text, nullable=True)
-
-    referenceOne = db.Column(db.Text, nullable=True)
-    referenceTwo = db.Column(db.Text, nullable=True)
 
     def __repr__(self):
         return f"{self.id}, {self.studentId}"
+
+class JobHistory(db.Model):
+    __tablename__='JobHistories'
+    id = db.Column(db.Integer, primary_key=True)
+    profileId = db.Column(db.Integer, ForeignKey('Profiles.id'), nullable=False)
+    title = db.Column(db.String(150), unique=False, nullable=True)
+    companyName = db.Column(db.String(150), unique=False, nullable=True)
+    startDate = db.Column(db.Date, unique=False, nullable=True)
+    endDate = db.Column(db.Date, unique=False, nullable=True)
+    description = db.Column(db.Text, unique=False, nullable=True)
+
+class References(db.Model):
+    __tablename__='References'
+    id = db.Column(db.Integer, primary_key=True)
+    profileId = db.Column(db.Integer, ForeignKey('Profiles.id'), nullable=False)
+    name = db.Column(db.String(150), unique=False, nullable=True)
+    email = db.Column(db.String(150), unique=False, nullable=True)
+    phoneNumber = db.Column(db.String(150), unique=False, nullable=True)
+    organization = db.Column(db.String(150), unique=False, nullable=True)
 
 class Listing(db.Model):
     __tablename__='Listings'
     id = db.Column(db.Integer, primary_key=True)
     businessId = db.Column(db.Integer, ForeignKey('Users.id'), nullable=False)
-    businessStreetAddress = db.Column(db.String(150), unique=False, nullable=False)
-    businessCity = db.Column(db.String(150), unique=False, nullable=False)
-    businessState = db.Column(db.String(150), unique=False, nullable=False)
-    businessZip = db.Column(db.Integer, unique=False, nullable=False)
+    streetAddress = db.Column(db.String(150), unique=False, nullable=False)
+    city = db.Column(db.String(150), unique=False, nullable=False)
+    state = db.Column(db.String(150), unique=False, nullable=False)
+    zip = db.Column(db.String(10), unique=False, nullable=False)
 
-    positionName = db.Column(db.String(150), unique=False, nullable=False)
-    positionQualifications = db.Column(db.Text, nullable=False) 
+    positionTitle = db.Column(db.String(150), unique=False, nullable=False)
+    qualifications = db.Column(db.Text, nullable=False) 
     isInternship = db.Column(db.Boolean, nullable=False)
     isPartTime = db.Column(db.Boolean, nullable=False)
-    positionDescrip = db.Column(db.Text, nullable=False)
-    positionBenefits = db.Column(db.Text, nullable=False)
-    positionSalary = db.Column(db.String(150), unique=False, nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    benefits = db.Column(db.Text, nullable=False)
+    salary = db.Column(db.String(150), unique=False, nullable=False)
     
     def __repr__(self):
         return f"{self.id}, {self.businessId}"

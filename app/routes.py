@@ -1,13 +1,79 @@
 from app import app
 from flask import render_template, redirect, url_for
-from app.forms import AddForm, DeleteForm, SearchForm, PopulationFilterForm
+from app.forms import AddForm, DeleteForm, SearchForm, PopulationFilterForm, StudentRegistrationForm, BusinessRegistrationForm, ListingForm
 from app import db
-from app.models import City
+from app.models import City, User, Listing
 import sys
 
 @app.route('/')
 def hello():
     return render_template('homepage.html')
+
+@app.route('/add_listing', methods=['GET', 'POST'])
+def add_listing():
+    form = ListingForm()
+    if form.validate_on_submit():
+        streetAddress = form.streetAddress.data
+        city = form.city.data
+        state = form.state.data
+        zip = form.zip.data
+        positionTitle = form.positionTitle.data
+        qualifications = form.qualifications.data
+        isInternship = bool(form.isInternship.data)
+        isPartTime = bool(form.isPartTime.data)
+        description = form. description.data
+        benefits = form.benefits.data
+        salary = form.salary.data
+
+        listing = Listing(businessId = 2, streetAddress=streetAddress, city=city, state=state, zip=zip, positionTitle=positionTitle, qualifications=qualifications, isInternship=isInternship, isPartTime=isPartTime, description=description, benefits=benefits, salary=salary)
+        db.session.add(listing)
+        db.session.commit()
+        return redirect(url_for('hello'))
+    return render_template('add_listing.html', form=form)
+
+
+@app.route('/registration')
+def register():
+    return render_template('registration.html')
+
+@app.route('/student_registration', methods=['GET', 'POST'])
+def student_registration():
+    form = StudentRegistrationForm()
+    if form.validate_on_submit():
+        firstName = form.firstName.data
+        lastName = form.lastName.data
+        email = form.email.data
+        password = form.password.data
+        role = 1
+        
+        student = User(firstName=firstName, lastName=lastName, email=email, password=password, role=role)
+        db.session.add(student)
+        db.session.commit()
+        return redirect(url_for('hello'))
+    return render_template('student_registration.html', form=form)
+
+
+
+
+@app.route('/business_registration', methods=['GET', 'POST'])
+def business_registration():
+    form = BusinessRegistrationForm()
+    if form.validate_on_submit():
+        firstName = form.firstName.data
+        lastName = form.lastName.data
+        businessName = form.businessName.data
+        email = form.email.data
+        password = form.password.data
+        role = 2
+
+        business = User(firstName=firstName, lastName=lastName, businessName=businessName, email=email, password=password, role=role)
+        db.session.add(business)
+        db.session.commit()
+        return redirect(url_for('hello'))
+    return render_template('business_registration.html', form=form)
+
+
+
 
 @app.route('/add', methods=['GET', 'POST'])
 def add_record():

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Add Listing</h2>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.streetAddress.label }}<br>
+            {{ form.streetAddress(size=32) }}
+        </p>
+        <p>
+            {{ form.city.label }}<br>
+            {{ form.city(size=32) }}
+        </p>
+        <p>
+            {{ form.state.label }}<br>
+            {{ form.state(size=32) }}
+        </p>
+        <p>
+            {{ form.zip.label }}<br>
+            {{ form.zip(size=32) }}
+        </p>
+        <p>
+            {{ form.positionTitle.label }}<br>
+            {{ form.positionTitle(size=32) }}
+        </p>
+        <p>
+            {{ form.qualifications.label }}<br>
+            {{ form.qualifications(size=32) }}
+        </p>
+        <p>
+            {{ form.isInternship.label }}<br>
+            {{ form.isInternship(size=32) }}
+        </p>
+        <p>
+            {{ form.isPartTime.label }}<br>
+            {{ form.isPartTime(size=32) }}
+        </p>
+        <p>
+            {{ form.description.label }}<br>
+            {{ form.description(size=32) }}
+        </p>
+        <p>
+            {{ form.benefits.label }}<br>
+            {{ form.benefits(size=32) }}
+        </p>
+        <p>
+            {{ form.salary.label }}<br>
+            {{ form.salary(size=32) }}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}
