@@ -1,6 +1,20 @@
 from app import app
-from flask import render_template, redirect, url_for
-from app.forms import AddForm, DeleteForm, SearchForm, PopulationFilterForm, StudentRegistrationForm, BusinessRegistrationForm, ListingForm, ProfileForm, JobHistoryForm, ReferencesForm
+from flask import render_template, redirect, url_for, flash
+from flask_login import login_user, logout_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+from app.forms import (
+    AddForm, 
+    DeleteForm, 
+    SearchForm, 
+    PopulationFilterForm, 
+    LoginForm, 
+    StudentRegistrationForm, 
+    BusinessRegistrationForm, 
+    ListingForm, 
+    ProfileForm, 
+    JobHistoryForm, 
+    ReferencesForm
+)
 from app import db
 from app.models import City, User, Listing, Profile, JobHistory, Reference
 import sys
@@ -8,6 +22,24 @@ import sys
 @app.route('/')
 def hello():
     return render_template('homepage.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    # Authenticated users are redirected to home page.
+    if current_user.is_authenticated:
+        return redirect(url_for('hello'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        # Query DB for user by username
+        user = db.session.query(User).filter_by(email=form.email.data).first()
+        if user is None or not user.check_password(form.password.data):
+            print('Login failed', file=sys.stderr)
+            return redirect(url_for('login'))
+        # login_user is a flask_login function that starts a session
+        login_user(user)
+        print('Login successful', file=sys.stderr)
+        return redirect(url_for('hello'))
+    return render_template('login.html', form=form) 
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
@@ -27,6 +59,8 @@ def profile():
         db.session.commit()
         return redirect(url_for('hello'))
     return render_template('profile.html', profileForm= ProfileForm())
+
+
 
 
 
@@ -64,10 +98,11 @@ def student_registration():
         firstName = form.firstName.data
         lastName = form.lastName.data
         email = form.email.data
-        password = form.password.data
+        password = generate_password_hash(form.password.data)
         role = 1
         
         student = User(firstName=firstName, lastName=lastName, email=email, password=password, role=role)
+
         db.session.add(student)
         db.session.commit()
         return redirect(url_for('hello'))

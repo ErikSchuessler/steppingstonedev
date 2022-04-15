@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SubmitField, SelectField, TextAreaField, RadioField, DateField
+from wtforms import StringField, IntegerField, SubmitField, PasswordField, SelectField, TextAreaField, RadioField, DateField
 from wtforms.validators import DataRequired
 
 class AddForm(FlaskForm):
@@ -19,11 +19,16 @@ class PopulationFilterForm(FlaskForm):
     population = IntegerField('Minimum population: ', validators=[DataRequired()])
     submit = SubmitField('Search')
 
+class LoginForm(FlaskForm):
+    email = StringField('Email: ', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Sign In')
+
 class StudentRegistrationForm(FlaskForm):
     firstName = StringField('First name:', validators=[DataRequired()])
     lastName = StringField('Last name:', validators=[DataRequired()])
     email = StringField('Email:', validators=[DataRequired()])
-    password = StringField('Password:', validators=[DataRequired()])
+    password = PasswordField('Password:', validators=[DataRequired()])
     submit = SubmitField('Register')
 
 class BusinessRegistrationForm(FlaskForm):

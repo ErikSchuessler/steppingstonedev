@@ -1,4 +1,6 @@
-from app import db
+from app import db, login
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy import Column, ForeignKey, Integer, String
 #from sqlalchemy.orm import declarative_base
 #from sqlalchemy.orm import relationship
@@ -16,15 +18,21 @@ class City(db.Model):
     def __repr__(self):
         return self.city + ': ' + str(self.population)
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__='Users'
     id = db.Column(db.Integer, primary_key=True)
     firstName = db.Column(db.String(64), unique=False, nullable=False)
     lastName = db.Column(db.String(64), unique=False, nullable=False)
     businessName = db.Column(db.String(64), unique=False, nullable=True)
     email = db.Column(db.String(64), unique=True, nullable=False)
-    password = db.Column(db.String(64), unique=False, nullable=False)
+    password = db.Column(db.String(256), unique=False, nullable=False)
     role = db.Column(db.Integer, ForeignKey('Roles.id'), nullable=False)
+
+    def set_password(self, passwordToEncrypt):
+        self.password = generate_password_hash(passwordToEncrypt)
+    
+    def check_password(self, passwordToCheck):
+        return check_password_hash(self.password, passwordToCheck)
     
     def __repr__(self):
         return f"{self.firstName}, {self.lastName}, {self.email}, {self.password}, {self.role}"
@@ -98,6 +106,9 @@ class Application(db.Model):
     def __repr__(self):
         return f"{self.id}, {self.profileId}, {self.listingId}"
 
+@login.user_loader
+def load_user(id):
+    return db.session.query(User).get(int(id))
 
 
 

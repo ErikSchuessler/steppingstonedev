@@ -2,6 +2,7 @@ from flask import Flask
 
 # New imports
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from dotenv import load_dotenv
 from os import environ
 import mysql.connector
@@ -26,5 +27,12 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
 # Create database connection and associate it with the Flask application
 db = SQLAlchemy(app)
 
+login = LoginManager(app)
+
+#enable @login_required
+login.login_view = 'login'
+
 # Add models
 from app import routes, models
+from app.models import User
+
