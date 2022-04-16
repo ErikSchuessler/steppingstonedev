@@ -1,12 +1,22 @@
 from app import db, login
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-from sqlalchemy import Column, ForeignKey, Integer, String
 #from sqlalchemy.orm import declarative_base
-#from sqlalchemy.orm import relationship
+from sqlalchemy.orm import backref, relationship
+from sqlalchemy import Table, Column, Integer, ForeignKey, String
+from sqlalchemy.ext.declarative import declarative_base
 from wtforms_alchemy import ModelForm, ModelFieldList
 from wtforms.fields import FormField
 
+class Parent(db.Model):
+    __tablename__ = 'parent'
+    id = Column(Integer, primary_key=True)
+
+class Child(db.Model):
+    __tablename__ = 'child'
+    id = Column(Integer, primary_key=True)
+    parent_id = Column(Integer, ForeignKey('parent.id'))
+    parent = relationship("Parent", backref=backref("child", uselist=False))
 
 # Define the DB schema
 class City(db.Model):
@@ -26,7 +36,12 @@ class User(UserMixin, db.Model):
     businessName = db.Column(db.String(64), unique=False, nullable=True)
     email = db.Column(db.String(64), unique=True, nullable=False)
     password = db.Column(db.String(256), unique=False, nullable=False)
-    role = db.Column(db.Integer, ForeignKey('Roles.id'), nullable=False)
+    role = db.Column(db.Integer, db.ForeignKey('Roles.id'), nullable=False)
+    
+    
+    profile = db.relationship('Profile', backref='User', lazy=True, uselist=False)
+
+
 
     def set_password(self, passwordToEncrypt):
         self.password = generate_password_hash(passwordToEncrypt)
@@ -37,18 +52,15 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f"{self.firstName}, {self.lastName}, {self.email}, {self.password}, {self.role}"
 
-class Roles(db.Model):
-    __tablename__='Roles'
-    id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String(64), unique=False, nullable=False)
-    
-    def __repr__(self):
-        return f"{self.id}, {self.description}, {self.role}"
-
 class Profile(db.Model):
     __tablename__='Profiles'
     id = db.Column(db.Integer, primary_key=True)
-    studentId = db.Column(db.Integer, ForeignKey('Users.id'), nullable=False)
+
+
+    userId = db.Column(db.Integer, db.ForeignKey('Users.id'))
+    #user = relationship("User", backref=backref('Profile', uselist=False))
+
+
     phoneNumber = db.Column(db.String(64), nullable=True)
     contactEmail = db.Column(db.String(64), unique=False, nullable=True)
     highSchool = db.Column(db.String(150), unique=False, nullable=True)
@@ -58,6 +70,14 @@ class Profile(db.Model):
    
     def __repr__(self):
         return f"{self.id}, {self.studentId}"
+
+class Roles(db.Model):
+    __tablename__='Roles'
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(64), unique=False, nullable=False)
+    
+    def __repr__(self):
+        return f"{self.id}, {self.description}, {self.role}"
 
 class JobHistory(db.Model):
     __tablename__='JobHistories'

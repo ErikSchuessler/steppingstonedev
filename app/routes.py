@@ -54,13 +54,14 @@ def profile():
 def edit_profile():
     profileForm = ProfileForm()
     if profileForm.validate_on_submit():
+        id = current_user.id
         phoneNumber = profileForm.phoneNumber.data
         contactEmail = profileForm.contactEmail.data
         highSchool = profileForm.highSchool.data
         university = profileForm.university.data
         introduction = profileForm.introduction.data
 
-        profile = Profile(studentId=1, phoneNumber=phoneNumber, contactEmail=contactEmail, highSchool=highSchool, university=university, introduction=introduction)
+        profile = Profile(userId=current_user.id, phoneNumber=phoneNumber, contactEmail=contactEmail, highSchool=highSchool, university=university, introduction=introduction)
         db.session.add(profile)
         db.session.commit()
         return redirect(url_for('profile'))
