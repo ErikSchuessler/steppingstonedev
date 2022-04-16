@@ -46,12 +46,13 @@ def logout():
     logout_user()
     return redirect(url_for('hello'))
 
-@app.route('/profile', methods=['GET', 'POST'])
+@app.route('/profile')
 def profile():
-    profileForm = ProfileForm()
-    referencesForm = ReferencesForm()
-    jobHistoryForm = JobHistoryForm()
+    return render_template('profile.html')
 
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def edit_profile():
+    profileForm = ProfileForm()
     if profileForm.validate_on_submit():
         phoneNumber = profileForm.phoneNumber.data
         contactEmail = profileForm.contactEmail.data
@@ -62,8 +63,44 @@ def profile():
         profile = Profile(studentId=1, phoneNumber=phoneNumber, contactEmail=contactEmail, highSchool=highSchool, university=university, introduction=introduction)
         db.session.add(profile)
         db.session.commit()
+        return redirect(url_for('profile'))
+    return render_template('edit_profile.html', profileForm= ProfileForm())
+
+@app.route('/add_reference', methods=['GET','POST'])
+def add_reference():
+    referencesForm = ReferencesForm()
+
+    if referencesForm.validate_on_submit():
+        name = referencesForm.name.data
+        email = referencesForm.email.data
+        phoneNumber = phoneNumber.referencesForm.data
+        organization = organization.referencesForm.data
+
+        reference = Reference(profiledId=1, name=name, email=email, phoneNumber=phoneNumber, organization=organization)
+        db.session.add(profile)
+        db.session.commit()
+        return redirect(url_for('profile'))
+    return render_template('add_reference.html')
+
+@app.route('/add_job_history', methods=['GET','POST'])
+def add_job_history():
+    jobHistoryForm = JobHistoryForm()
+
+    if jobHistoryForm.validate_on_submit():
+        title = jobHistoryForm.name.data
+        companyName = jobHistoryForm.email.data
+        startDate = phoneNumber.jobHistoryForm.data
+        endDate = organization.jobHistoryForm.data
+        description = description
+
+        jobHistory = JobHistory(profiledId=1, name=name, email=email, phoneNumber=phoneNumber, organization=organization)
+        db.session.add(profile)
+        db.session.commit()
         return redirect(url_for('hello'))
-    return render_template('profile.html', profileForm= ProfileForm())
+    return render_template('add_reference.html')
+
+
+    
 
 @app.route('/add_listing', methods=['GET', 'POST'])
 def add_listing():

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Edit Profile</h2>
+    <form action="" method="post" novalidate>
+        {{ profileForm.hidden_tag() }}
+        <p>
+            {{ profileForm.phoneNumber.label }}<br>
+            {{ profileForm.phoneNumber(size=32) }}
+        </p>
+        <p>
+            {{ profileForm.contactEmail.label }}<br>
+            {{ profileForm.contactEmail(size=32) }}
+        </p>
+        <p>
+            {{ profileForm.highSchool.label }}<br>
+            {{ profileForm.highSchool(size=32) }}
+        </p>
+        <p>
+            {{ profileForm.university.label }}<br>
+            {{ profileForm.university(size=32) }}
+        </p>
+        <p>
+            {{ profileForm.introduction.label }}<br>
+            {{ profileForm.introduction(size=32) }}
+        </p>
+        <p>{{ profileForm.submit() }}</p>
+    </form>
+{% endblock %}
