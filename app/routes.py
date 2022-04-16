@@ -39,7 +39,12 @@ def login():
         login_user(user)
         print('Login successful', file=sys.stderr)
         return redirect(url_for('hello'))
-    return render_template('login.html', form=form) 
+    return render_template('login.html', form=form)
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('hello'))
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
@@ -54,15 +59,11 @@ def profile():
         university = profileForm.university.data
         introduction = profileForm.introduction.data
 
-        profile = Profile(studentId=3, phoneNumber=phoneNumber, contactEmail=contactEmail, highSchool=highSchool, university=university, introduction=introduction)
+        profile = Profile(studentId=1, phoneNumber=phoneNumber, contactEmail=contactEmail, highSchool=highSchool, university=university, introduction=introduction)
         db.session.add(profile)
         db.session.commit()
         return redirect(url_for('hello'))
     return render_template('profile.html', profileForm= ProfileForm())
-
-
-
-
 
 @app.route('/add_listing', methods=['GET', 'POST'])
 def add_listing():
@@ -85,6 +86,13 @@ def add_listing():
         db.session.commit()
         return redirect(url_for('hello'))
     return render_template('add_listing.html', form=form)
+
+@app.route('/view_listings', methods=['GET', 'POST'])
+def view_listings():
+    all = db.session.query(Listing).all()
+    print(all, file=sys.stderr)
+    return render_template('view_listings.html', Listings=all)
+
 
 
 @app.route('/registration')

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table style="width: 100%;" border="6" cellpadding="20">
+    
+    <tr>
+        <th style="text-align:center">Business</th>
+        <th style="text-align:center">Address</th>
+        <th style="text-align:center">Position</th>
+        <th style="text-align:center">Qualifications</th>
+        <th style="text-align:center">Type</th>
+        <th style="text-align:center">Work Time</th>
+        <th style="text-align:center">Description</th>
+        <th style="text-align:center">Benefits</th>
+        <th style="text-align:center">Salary</th>
+    </tr>
+    {% for listing in Listings %}
+    <tr>
+        <td>*BUSINESS NAME*</td>
+        <td>{{listing.streetAddress}}<br>
+            {{listing.city}}, {{listing.state}}, {{listing.zip}}</td>
+        <td>{{listing.positionTitle}}</td>
+        <td>{{listing.qualifications}}</td>
+        <td>
+            {% if listing.isInternship==1: %}
+                Internship
+            {% elif listing.isInternship==0: %}
+                Job
+            {% endif %}
+        </td>
+        <td>
+            {% if listing.isPartTime==1: %}
+                Part-time
+            {% elif listing.isParTime==0: %}
+                Full-time
+            {% endif %}
+        </td>    
+        <td>{{listing.description}}</td>
+        <td>{{listing.benefits}}</td>
+        <td>{{listing.salary}}</td>
+    </tr>
+    {% endfor %}
+    </table>
+			
+{% endblock %}
