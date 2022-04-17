@@ -69,7 +69,7 @@ class Profile(db.Model):
 
    
     def __repr__(self):
-        return f"{self.id}, {self.studentId}"
+        return f"{self.id}"
 
 class Roles(db.Model):
     __tablename__='Roles'

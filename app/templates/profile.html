@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>Erik Schuessler</h1>
+<h1>USER NAME</h1>
 <form action="/edit_profile">
 <input type="submit" value="Edit Profile" />
 </form>
@@ -11,25 +11,26 @@
   text-align: left;
 }
 </style>
+<tr>
 		<tr>
             <th>Phone:</th>
-                <td>203-308-0989</td>
+                <td>{{Profile.phoneNumber}}</td>
 		</tr>
             <tr> 
             <th>Email:</th>
-                <td>schuessler.erik@gmail.com</td>
+                <td>{{Profile.contactEmail}}</td>
         </tr>
         <tr>
             <th>High School:</th>
-                <td>Amity Regional High School</td>
+                <td>{{Profile.highSchool}}</td>
         </tr>
         <tr>
             <th>College/University:</th>
-                <td>Southern Connecticut State University</td>
+                <td>{{Profile.university}}</td>
         </tr>
         <tr>
             <th>Description:</th>
-                <td>Software engineers focus on applying the principles of engineering to software development. Their role includes analyzing and modifying existing software as well as designing, constructing and testing end-user applications that meet user needs — all through software programming languages.</td>
+                <td>{{Profile.introduction}}</td>
         </tr>
  </table>
 

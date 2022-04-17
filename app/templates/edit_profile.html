@@ -6,23 +6,43 @@
         {{ profileForm.hidden_tag() }}
         <p>
             {{ profileForm.phoneNumber.label }}<br>
-            {{ profileForm.phoneNumber(size=32) }}
+            {% if profile == None: %}
+                {{ profileForm.phoneNumber(size=32) }}
+            {% else: %}
+                {{ profileForm.phoneNumber(value=profile.phoneNumber) }}
+            {% endif %}
         </p>
         <p>
             {{ profileForm.contactEmail.label }}<br>
-            {{ profileForm.contactEmail(size=32) }}
+            {% if profile == None: %} 
+                {{ profileForm.contactEmail(size=32) }}
+            {% else: %} 
+                {{ profileForm.contactEmail(value=profile.contactEmail) }}
+            {% endif %}
         </p>
         <p>
             {{ profileForm.highSchool.label }}<br>
-            {{ profileForm.highSchool(size=32) }}
+            {% if profile == None: %} 
+                {{ profileForm.highSchool(size=32) }}
+            {% else: %} 
+                {{ profileForm.highSchool(value=profile.highSchool) }}
+            {% endif %}
         </p>
         <p>
             {{ profileForm.university.label }}<br>
-            {{ profileForm.university(size=32) }}
+            {% if profile == None: %} 
+                {{ profileForm.university(size=32) }}
+            {% else: %} 
+                {{ profileForm.university(value=profile.university) }}
+            {% endif %}
         </p>
         <p>
             {{ profileForm.introduction.label }}<br>
-            {{ profileForm.introduction(size=32) }}
+            {% if profile == None: %} 
+                {{ profileForm.introduction(size=32) }}
+            {% else: %} 
+                {{ profileForm.introduction(value=profile.introduction) }}
+            {% endif %}
         </p>
         <p>{{ profileForm.submit() }}</p>
     </form>

@@ -48,24 +48,34 @@ def logout():
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
+    userProfile = db.session.query(Profile).filter_by(userId = current_user.id).first()
+    return render_template('profile.html', Profile=userProfile)
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
+    print('edit profile')
     profileForm = ProfileForm()
+    userProfile = db.session.query(Profile).filter_by(userId = current_user.id).first()
     if profileForm.validate_on_submit():
-        id = current_user.id
-        phoneNumber = profileForm.phoneNumber.data
-        contactEmail = profileForm.contactEmail.data
-        highSchool = profileForm.highSchool.data
-        university = profileForm.university.data
-        introduction = profileForm.introduction.data
-
-        profile = Profile(userId=current_user.id, phoneNumber=phoneNumber, contactEmail=contactEmail, highSchool=highSchool, university=university, introduction=introduction)
-        db.session.add(profile)
+        #add new profile logic here, when userProfile is null, we have to add user
+        if userProfile == None: 
+            userProfile = Profile()
+            userProfile.userId = current_user.id
+            db.session.add(userProfile)
+             
+        userProfile.phoneNumber = profileForm.phoneNumber.data
+        userProfile.contactEmail = profileForm.contactEmail.data
+        userProfile.highSchool = profileForm.highSchool.data
+        userProfile.university = profileForm.university.data
+        userProfile.introduction = profileForm.introduction.data
+          
+        print('just before commit' + str(userProfile.id))
         db.session.commit()
         return redirect(url_for('profile'))
-    return render_template('edit_profile.html', profileForm= ProfileForm())
+    else:
+        
+        return render_template('edit_profile.html', profileForm= ProfileForm(), profile = userProfile)
+
 
 @app.route('/add_reference', methods=['GET','POST'])
 def add_reference():
