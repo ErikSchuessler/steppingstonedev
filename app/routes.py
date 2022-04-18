@@ -45,9 +45,12 @@ def logout():
 @app.route('/profile')
 def profile():
     userProfile = db.session.query(Profile).filter_by(userId = current_user.id).first()
-    userJobHistories = db.session.query(JobHistory).filter_by(profileId = userProfile.id).all()
-    userReferences = db.session.query(Reference).filter_by(profileId = userProfile.id).all()
-    return render_template('profile.html', Profile=userProfile, JobHistories = userJobHistories, References = userReferences)
+    if userProfile is None:
+        return render_template('profile.html', Profile=userProfile)
+    else:
+        userJobHistories = db.session.query(JobHistory).filter_by(profileId = userProfile.id).all()
+        userReferences = db.session.query(Reference).filter_by(profileId = userProfile.id).all()
+        return render_template('profile.html', Profile=userProfile, JobHistories = userJobHistories, References = userReferences)
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
