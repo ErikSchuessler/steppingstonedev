@@ -40,9 +40,13 @@
     {% for job in JobHistories %}
         <form action="/edit_job_history">
             
-            <input type="submit" value="Edit Job History" /> 
+            <input type="submit" value="Edit Job" /> 
             <input type="hidden" name="jobid" value={{job.id}}>
-            <button>Delete Job</button>
+        </form>
+        <form action="/delete_job_history">
+            <input type="submit" value="Delete Job">
+            <input type="hidden" name="jobid" value={{job.id}}>
+        </form>
         
             <table style="width: 60%;" border="1"  cellpadding="3">
             <style> td, th {
@@ -70,10 +74,10 @@
                             <td>{{job.description}}</td>
                     </tr>
             </table>
-        </form>
     {% endfor %}
-        <form action="/edit_job_history">
-            <input type="submit" value="Add Job History" />
+        <br>
+        <form action="/add_job_history">
+            <input type="submit" value="Add Job" />
         </form>
 
 {% endif %}

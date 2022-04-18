@@ -92,6 +92,25 @@ def add_reference():
         return redirect(url_for('profile'))
     return render_template('add_reference.html')
 
+@app.route('/add_job_history', methods=['GET','POST'])
+def add_job_history():
+    jobHistoryForm = JobHistoryForm()
+    userProfile = db.session.query(Profile).filter_by(userId = current_user.id).first()
+
+    if jobHistoryForm.validate_on_submit():
+        profileId = userProfile.id
+        title = jobHistoryForm.title.data
+        companyName = jobHistoryForm.companyName.data
+        startDate = jobHistoryForm.startDate.data
+        endDate = jobHistoryForm.endDate.data
+        description = jobHistoryForm.description.data
+        jobHistory = JobHistory(profileId=profileId, title=title, companyName=companyName, startDate=startDate, endDate=endDate, description=description)
+        db.session.add(jobHistory)
+        db.session.commit()
+        return redirect(url_for('profile'))
+    return render_template('add_job_history.html', jobHistoryForm=jobHistoryForm)
+
+
 @app.route('/edit_job_history', methods=['GET','POST'])
 def edit_job_history():
     jobHistoryForm = JobHistoryForm()
@@ -118,7 +137,21 @@ def edit_job_history():
         jobId = request.args.get('jobid')
         userJobHistory = db.session.query(JobHistory).filter_by(id = jobId).first()
         return render_template('edit_job_history.html', jobHistoryForm= JobHistoryForm(), job = userJobHistory, profile = userProfile, errors = jobHistoryForm.errors)
+
+@app.route('/delete_job_history', methods=['GET','POST'])
+def delete_job():
+    #jobHistoryForm = JobHistoryForm()
+    jobId = request.args.get('jobid')
+
+    userJobHistory = db.session.query(JobHistory).filter_by(id = jobId).first()
+    #print(jobHistoryForm.id.data)
+    db.session.delete(userJobHistory)
+    db.session.commit()
+    return redirect(url_for('profile'))
     
+
+
+
 @app.route('/add_listing', methods=['GET', 'POST'])
 def add_listing():
     form = ListingForm()
@@ -266,5 +299,7 @@ def filter_population():
         else:
             return render_template('not_found.html')
     return render_template('filter_populations.html', form=form)
+
+
     
     

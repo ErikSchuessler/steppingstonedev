@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Add Job History</h2>
+    {% if errors: %}
+    <span style="color:red">{{errors}}</span>
+    {% endif %}
+    <form action="" method="post" novalidate>
+        {{jobHistoryForm.hidden_tag() }}
+        <p>
+            {{ jobHistoryForm.title.label }}<br>
+            {{ jobHistoryForm.title(size=32) }}
+
+        </p>
+        <p>
+            {{ jobHistoryForm.companyName.label }}<br>
+            {{ jobHistoryForm.companyName(size=32) }}
+        </p>
+        <p>
+            {{ jobHistoryForm.startDate.label }}<br>
+            {{ jobHistoryForm.startDate(size=32) }}
+
+        </p>
+        <p>
+            {{ jobHistoryForm.endDate.label }}<br>
+            {{ jobHistoryForm.endDate(size=32) }}
+        </p>
+        <p>
+            {{ jobHistoryForm.description.label }}<br>
+            {{ jobHistoryForm.description(size=32) }}
+
+        </p>
+        <p>{{ jobHistoryForm.submit() }}</p>
+    </form>
+{% endblock %}
