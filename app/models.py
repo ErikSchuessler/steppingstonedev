@@ -38,11 +38,6 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(256), unique=False, nullable=False)
     role = db.Column(db.Integer, db.ForeignKey('Roles.id'), nullable=False)
     
-    
-    profile = db.relationship('Profile', backref='User', lazy=True, uselist=False)
-
-
-
     def set_password(self, passwordToEncrypt):
         self.password = generate_password_hash(passwordToEncrypt)
     
@@ -55,19 +50,13 @@ class User(UserMixin, db.Model):
 class Profile(db.Model):
     __tablename__='Profiles'
     id = db.Column(db.Integer, primary_key=True)
-
-
     userId = db.Column(db.Integer, db.ForeignKey('Users.id'))
-    #user = relationship("User", backref=backref('Profile', uselist=False))
-
-
     phoneNumber = db.Column(db.String(64), nullable=True)
     contactEmail = db.Column(db.String(64), unique=False, nullable=True)
     highSchool = db.Column(db.String(150), unique=False, nullable=True)
     university = db.Column(db.String(150), unique=False, nullable=True) 
     introduction = db.Column(db.Text, nullable=True)
 
-   
     def __repr__(self):
         return f"{self.id}"
 

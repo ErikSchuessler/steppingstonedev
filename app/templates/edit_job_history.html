@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Edit Job History</h2>
+    <form action="" method="post" novalidate>
+        {{jobHistoryForm.hidden_tag() }}
+        <p>
+            {{ jobHistoryForm.id.label }}<br>
+            {% if job == None: %}
+                {{ jobHistoryForm.id(size=32) }}
+            {% else: %}
+                {{ jobHistoryForm.id(value=job.id) }}
+            {% endif %}
+        </p>
+        <p>
+            {{ jobHistoryForm.title.label }}<br>
+            {% if job == None: %}
+                {{ jobHistoryForm.title(size=32) }}
+            {% else: %}
+                {{ jobHistoryForm.title(value=job.title) }}
+            {% endif %}
+        </p>
+        <p>
+            {{ jobHistoryForm.companyName.label }}<br>
+            {% if job == None: %} 
+                {{ jobHistoryForm.companyName(size=32) }}
+            {% else: %} 
+                {{ jobHistoryForm.companyName(value=job.companyName) }}
+            {% endif %}
+        </p>
+        <p>
+            {{ jobHistoryForm.startDate.label }}<br>
+            {% if job == None: %} 
+                {{ jobHistoryForm.startDate(size=32) }}
+            {% else: %} 
+                {{ jobHistoryForm.startDate(value=job.startDate) }}
+            {% endif %}
+        </p>
+        <p>
+            {{ jobHistoryForm.endDate.label }}<br>
+            {% if job == None: %} 
+                {{ jobHistoryForm.endDate(size=32) }}
+            {% else: %} 
+                {{ jobHistoryForm.endDate(value=job.endDate) }}
+            {% endif %}
+        </p>
+        <p>
+            {{ jobHistoryForm.description.label }}<br>
+            {% if job == None: %} 
+                {{ jobHistoryForm.description(size=32) }}
+            {% else: %} 
+                {{ jobHistoryForm.description(value=job.description) }}
+            {% endif %}
+        </p>
+        <p>{{ jobHistoryForm.submit() }}</p>
+    </form>
+{% endblock %}

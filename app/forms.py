@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SubmitField, PasswordField, SelectField, TextAreaField, RadioField, DateField
+from wtforms import StringField, HiddenField, IntegerField, SubmitField, PasswordField, SelectField, TextAreaField, RadioField, DateField
 from wtforms.validators import DataRequired
 
 class AddForm(FlaskForm):
@@ -55,20 +55,21 @@ class ListingForm(FlaskForm):
     submit = SubmitField('Submit Listing')
 
 class ProfileForm(FlaskForm):
-    phoneNumber = StringField('Phone number: ', validators=[DataRequired()])
-    contactEmail = StringField('Email: ', validators=[DataRequired()])
-    highSchool = StringField('High School: ', validators=[DataRequired()])
-    university = StringField('College/University: ', validators=[DataRequired()])
-    introduction = TextAreaField('Describe yourself...', validators=[DataRequired()])
+    phoneNumber = StringField('Phone number: ')
+    contactEmail = StringField('Email: ')
+    highSchool = StringField('High School: ')
+    university = StringField('College/University: ')
+    introduction = TextAreaField('Describe yourself...')
 
     submit = SubmitField('Apply Changes')
 
 class JobHistoryForm(FlaskForm):
+    id = IntegerField('Id')
     title = StringField('Previous position title: ', validators=[DataRequired()])
-    companyName = StringField('Previous employer name: ', validators=[DataRequired()])
-    startDate = DateField('Start Date: ', format = '%m/%d/%Y', validators=[DataRequired()])
-    endDate = DateField('End Date: ', format = '%m/%d/%Y', validators=[DataRequired()])
-    description = StringField('Describe your position: ', validators=[DataRequired()])
+    companyName = StringField('Previous employer name: ')
+    startDate = DateField('Start Date: ')
+    endDate = DateField('End Date: ')
+    description = StringField('Describe your position: ')
 
     submit = SubmitField('Apply Changes')
 

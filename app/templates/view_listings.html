@@ -13,6 +13,7 @@
         <th style="text-align:center">Description</th>
         <th style="text-align:center">Benefits</th>
         <th style="text-align:center">Salary</th>
+        <th style="text-align:center">Apply</th>
     </tr>
     {% for listing in Listings %}
     <tr>
@@ -38,8 +39,10 @@
         <td>{{listing.description}}</td>
         <td>{{listing.benefits}}</td>
         <td>{{listing.salary}}</td>
+        <td><button style=>Apply for job</button></td>
     </tr>
     {% endfor %}
+
     </table>
 			
 {% endblock %}

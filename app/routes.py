@@ -1,5 +1,5 @@
 from app import app
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.forms import (
@@ -49,15 +49,15 @@ def logout():
 @app.route('/profile')
 def profile():
     userProfile = db.session.query(Profile).filter_by(userId = current_user.id).first()
-    return render_template('profile.html', Profile=userProfile)
+    userJobHistories = db.session.query(JobHistory).filter_by(profileId = userProfile.id).all()
+    userReferences = db.session.query(Reference).filter_by(profileId = userProfile.id).all()
+    return render_template('profile.html', Profile=userProfile, JobHistories = userJobHistories, References = userReferences)
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
-    print('edit profile')
     profileForm = ProfileForm()
     userProfile = db.session.query(Profile).filter_by(userId = current_user.id).first()
     if profileForm.validate_on_submit():
-        #add new profile logic here, when userProfile is null, we have to add user
         if userProfile == None: 
             userProfile = Profile()
             userProfile.userId = current_user.id
@@ -69,7 +69,6 @@ def edit_profile():
         userProfile.university = profileForm.university.data
         userProfile.introduction = profileForm.introduction.data
           
-        print('just before commit' + str(userProfile.id))
         db.session.commit()
         return redirect(url_for('profile'))
     else:
@@ -93,22 +92,43 @@ def add_reference():
         return redirect(url_for('profile'))
     return render_template('add_reference.html')
 
-@app.route('/add_job_history', methods=['GET','POST'])
-def add_job_history():
+@app.route('/edit_job_history', methods=['GET','POST'])
+def edit_job_history():
     jobHistoryForm = JobHistoryForm()
+    userProfile = db.session.query(Profile).filter_by(userId = current_user.id).first()
+  
+    if jobHistoryForm.is_submitted():
+        print("submitted")
+
+    if jobHistoryForm.validate():
+        print("valid")
+    else:
+        print(jobHistoryForm.errors)
 
     if jobHistoryForm.validate_on_submit():
-        title = jobHistoryForm.name.data
-        companyName = jobHistoryForm.email.data
-        startDate = phoneNumber.jobHistoryForm.data
-        endDate = organization.jobHistoryForm.data
-        description = description
-
-        jobHistory = JobHistory(profiledId=1, name=name, email=email, phoneNumber=phoneNumber, organization=organization)
-        db.session.add(profile)
+        #if request.method == 'POST':
+        userJobHistory = db.session.query(JobHistory).filter_by(id = jobHistoryForm.id.data).first()
+        print('Validated Submit')
+        #print('userJobHistory Job Id: ' + str(jobId))
+        print('userJobHistory Profile Id: ' + str(userJobHistory.profileId))
+        print('In Submit: ' + str(jobHistoryForm.title.data))
+        userJobHistory.title = jobHistoryForm.title.data
+        userJobHistory.companyName = jobHistoryForm.companyName.data
+        userJobHistory.startDate = jobHistoryForm.startDate.data
+        userJobHistory.endDate = jobHistoryForm.endDate.data
+        userJobHistory.description = jobHistoryForm.description.data      
         db.session.commit()
-        return redirect(url_for('hello'))
-    return render_template('add_reference.html')
+        return redirect(url_for('profile'))
+        #else:
+            #return redirect(url_for('hello'))
+    else:
+        jobId = request.args.get('jobid')
+        print('Request Job Id: ' + str(jobId))
+        userJobHistory = db.session.query(JobHistory).filter_by(id = jobId).first()
+        print('FOUND JOB USING GET: ' + str(jobId))
+        return render_template('edit_job_history.html', jobHistoryForm= JobHistoryForm(), job = userJobHistory, profile = userProfile)
+    
+  
 
 
     
