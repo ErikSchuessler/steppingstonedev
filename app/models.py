@@ -8,26 +8,6 @@ from sqlalchemy.ext.declarative import declarative_base
 from wtforms_alchemy import ModelForm, ModelFieldList
 from wtforms.fields import FormField
 
-class Parent(db.Model):
-    __tablename__ = 'parent'
-    id = Column(Integer, primary_key=True)
-
-class Child(db.Model):
-    __tablename__ = 'child'
-    id = Column(Integer, primary_key=True)
-    parent_id = Column(Integer, ForeignKey('parent.id'))
-    parent = relationship("Parent", backref=backref("child", uselist=False))
-
-# Define the DB schema
-class City(db.Model):
-    __tablename__ = 'cities'
-    id = db.Column(db.Integer, primary_key=True)
-    city = db.Column(db.String(64), unique=True, nullable=False)
-    population = db.Column(db.Integer, unique=False, nullable=False)
-
-    def __repr__(self):
-        return self.city + ': ' + str(self.population)
-
 class User(UserMixin, db.Model):
     __tablename__='Users'
     id = db.Column(db.Integer, primary_key=True)

@@ -3,10 +3,6 @@ from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.forms import (
-    AddForm, 
-    DeleteForm, 
-    SearchForm, 
-    PopulationFilterForm, 
     LoginForm, 
     StudentRegistrationForm, 
     BusinessRegistrationForm, 
@@ -16,7 +12,7 @@ from app.forms import (
     ReferencesForm
 )
 from app import db
-from app.models import City, User, Listing, Profile, JobHistory, Reference
+from app.models import User, Listing, Profile, JobHistory, Reference
 import sys
 
 @app.route('/')
@@ -75,7 +71,6 @@ def edit_profile():
         
         return render_template('edit_profile.html', profileForm= ProfileForm(), profile = userProfile)
 
-
 @app.route('/add_reference', methods=['GET','POST'])
 def add_reference():
     referencesForm = ReferencesForm()
@@ -109,7 +104,6 @@ def add_job_history():
         db.session.commit()
         return redirect(url_for('profile'))
     return render_template('add_job_history.html', jobHistoryForm=jobHistoryForm)
-
 
 @app.route('/edit_job_history', methods=['GET','POST'])
 def edit_job_history():
@@ -149,9 +143,6 @@ def delete_job():
     db.session.commit()
     return redirect(url_for('profile'))
     
-
-
-
 @app.route('/add_listing', methods=['GET', 'POST'])
 def add_listing():
     form = ListingForm()
@@ -180,8 +171,6 @@ def view_listings():
     print(all, file=sys.stderr)
     return render_template('view_listings.html', Listings=all)
 
-
-
 @app.route('/registration')
 def register():
     return render_template('registration.html')
@@ -203,9 +192,6 @@ def student_registration():
         return redirect(url_for('hello'))
     return render_template('student_registration.html', form=form)
 
-
-
-
 @app.route('/business_registration', methods=['GET', 'POST'])
 def business_registration():
     form = BusinessRegistrationForm()
@@ -226,79 +212,7 @@ def business_registration():
 
 
 
-@app.route('/add', methods=['GET', 'POST'])
-def add_record():
-    form = AddForm()
-    if form.validate_on_submit():
-        # Extract values from form
-        city_name = form.city.data
-        population = form.population.data
 
-        # Create a city record to store in the DB
-        c = City(city=city_name, population=population)
-
-        # add record to table and commit changes
-        db.session.add(c)
-        db.session.commit()
-
-        form.city.data = ''
-        form.population.data = ''
-        return redirect(url_for('add_record'))
-    return render_template('add.html', form=form)
-
-@app.route('/delete', methods=['GET', 'POST'])
-def delete_record():
-    form = DeleteForm()
-    if form.validate_on_submit():
-        # Query DB for matching record (we'll grab the first record in case
-        # there's more than one).
-        to_delete = db.session.query(City).filter_by(city = form.city.data).first()
-
-        # If record is found delete from DB table and commit changes
-        if to_delete is not None:
-            db.session.delete(to_delete)
-            db.session.commit()
-
-        form.city.data = ''
-        # Redirect to the view_all route (view function)
-        return redirect(url_for('view'))
-    return render_template('delete.html', form=form)
-
-@app.route('/search', methods=['GET', 'POST'])
-def search_by_name():
-    form = SearchForm()
-    if form.validate_on_submit():
-        # Query DB table for matching name
-        record = db.session.query(City).filter_by(city = form.city.data).all()
-        if record:
-            return render_template('view_cities.html', cities=record)
-        else:
-            return render_template('not_found.html')
-    return render_template('search.html', form=form)
-
-@app.route('/view_all')
-def view():
-    all = db.session.query(City).all()
-    print(all, file=sys.stderr)
-    return render_template('view_cities.html', cities=all)
-
-@app.route('/sort_by_name')
-def sort_by_name():
-    all = db.session.query(City).order_by(City.city).all()
-    print(all, file=sys.stderr)
-    return render_template('view_cities.html', cities=all)
-
-@app.route('/filter_population', methods=['GET','POST'])
-def filter_population():
-    form = PopulationFilterForm()
-    if form.validate_on_submit():
-        min_population = form.population.data
-        record = db.session.query(City).filter(City.population >= min_population).all()
-        if record:
-            return render_template('view_cities.html', cities=record)
-        else:
-            return render_template('not_found.html')
-    return render_template('filter_populations.html', form=form)
 
 
     

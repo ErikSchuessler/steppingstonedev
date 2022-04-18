@@ -2,23 +2,6 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, HiddenField, IntegerField, SubmitField, PasswordField, SelectField, TextAreaField, RadioField, DateField
 from wtforms.validators import DataRequired
 
-class AddForm(FlaskForm):
-    city = StringField('City:', validators=[DataRequired()])
-    population = IntegerField('Population: ', validators=[DataRequired()])
-    submit = SubmitField('Save')
-
-class DeleteForm(FlaskForm):
-    city = StringField('City:', validators=[DataRequired()])
-    submit = SubmitField('Delete')
-
-class SearchForm(FlaskForm):
-    city = StringField('City:', validators=[DataRequired()])
-    submit = SubmitField('Search')
-
-class PopulationFilterForm(FlaskForm):
-    population = IntegerField('Minimum population: ', validators=[DataRequired()])
-    submit = SubmitField('Search')
-
 class LoginForm(FlaskForm):
     email = StringField('Email: ', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])

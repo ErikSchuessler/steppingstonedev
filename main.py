@@ -3,7 +3,7 @@ from app import db
 #from sqlalchemy.orm import backref, relationship
 #from sqlalchemy import MetaData, Table, Column, Integer, ForeignKey, String, Text, Date, Boolean
 #from sqlalchemy.ext.declarative import declarative_base
-from app.models import Roles, Parent, Child
+from app.models import Roles
 import sys
 
 
@@ -33,3 +33,6 @@ db.session.add(parent2)
 db.session.add(child3)
 db.session.add(child4)
 db.session.commit() """
+
+""" if __name__ == "__main__":
+    create_app().run() """
