@@ -2,6 +2,9 @@
 
 {% block content %}
     <h2>Edit Job History</h2>
+    {% if errors: %}
+    <span style="color:red">{{errors}}</span>
+    {% endif %}
     <form action="" method="post" novalidate>
         {{jobHistoryForm.hidden_tag() }}
         <p>

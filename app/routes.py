@@ -106,12 +106,7 @@ def edit_job_history():
         print(jobHistoryForm.errors)
 
     if jobHistoryForm.validate_on_submit():
-        #if request.method == 'POST':
         userJobHistory = db.session.query(JobHistory).filter_by(id = jobHistoryForm.id.data).first()
-        print('Validated Submit')
-        #print('userJobHistory Job Id: ' + str(jobId))
-        print('userJobHistory Profile Id: ' + str(userJobHistory.profileId))
-        print('In Submit: ' + str(jobHistoryForm.title.data))
         userJobHistory.title = jobHistoryForm.title.data
         userJobHistory.companyName = jobHistoryForm.companyName.data
         userJobHistory.startDate = jobHistoryForm.startDate.data
@@ -119,20 +114,11 @@ def edit_job_history():
         userJobHistory.description = jobHistoryForm.description.data      
         db.session.commit()
         return redirect(url_for('profile'))
-        #else:
-            #return redirect(url_for('hello'))
     else:
         jobId = request.args.get('jobid')
-        print('Request Job Id: ' + str(jobId))
         userJobHistory = db.session.query(JobHistory).filter_by(id = jobId).first()
-        print('FOUND JOB USING GET: ' + str(jobId))
-        return render_template('edit_job_history.html', jobHistoryForm= JobHistoryForm(), job = userJobHistory, profile = userProfile)
+        return render_template('edit_job_history.html', jobHistoryForm= JobHistoryForm(), job = userJobHistory, profile = userProfile, errors = jobHistoryForm.errors)
     
-  
-
-
-    
-
 @app.route('/add_listing', methods=['GET', 'POST'])
 def add_listing():
     form = ListingForm()
