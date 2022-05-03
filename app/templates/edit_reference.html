@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Edit Reference</h2>
+    {% if errors: %}
+    <span style="color:red">{{errors}}</span>
+    {% endif %}
+    <form action="" method="post" novalidate>
+        {{ referencesForm.hidden_tag() }}
+
+        <p>
+            {{ referencesForm.id.label }}<br>
+            {% if reference == None: %}
+                {{ referencesForm.id(size=32) }}
+            {% else: %}
+                {{ referencesForm.id(value=reference.id) }}
+            {% endif %}
+        </p>
+
+        <p>
+            {{ referencesForm.name.label }}<br>
+            {% if reference == None: %}
+                {{ referencesForm.name(size=32) }}
+            {% else: %}
+                {{ referencesForm.name(value=reference.name) }}
+            {% endif %}
+        </p>
+
+        <p>
+            {{ referencesForm.email.label }}<br>
+            {% if reference == None: %}
+                {{ referencesForm.email(size=32) }}
+            {% else: %}
+                {{ referencesForm.email(value=reference.email) }}
+            {% endif %}
+        </p>
+
+        <p>
+            {{ referencesForm.phoneNumber.label }}<br>
+            {% if reference == None: %}
+                {{ referencesForm.phoneNumber(size=32) }}
+            {% else: %}
+                {{ referencesForm.phoneNumber(value=reference.phoneNumber) }}
+            {% endif %}
+        </p>
+
+        <p>
+            {{ referencesForm.organization.label }}<br>
+            {% if reference == None: %}
+                {{ referencesForm.organization(size=32) }}
+            {% else: %}
+                {{ referencesForm.organization(value=reference.organization) }}
+            {% endif %}
+        </p>
+
+        <p>{{ referencesForm.submit() }}</p>
+    </form>
+{% endblock %}

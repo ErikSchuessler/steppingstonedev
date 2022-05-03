@@ -57,9 +57,10 @@ class JobHistoryForm(FlaskForm):
     submit = SubmitField('Apply Changes')
 
 class ReferencesForm(FlaskForm):
+    id = IntegerField('Id')
     name = StringField("Full Name (Reference): ", validators=[DataRequired()])
     email = StringField("Email (Reference): ", validators=[DataRequired()])
-    phoneNumber = StringField("Phone # (Reference): ", validators=[DataRequired()])
+    phoneNumber = StringField("Phone Number (Reference): ", validators=[DataRequired()])
     organization = StringField("Organization (Reference): ", validators=[DataRequired()])
 
     submit = SubmitField('Apply Changes')

@@ -39,6 +39,7 @@
     <h1>Job History:</h1>
 
     {% for job in JobHistories %}
+        <br>
         <form action="/edit_job_history">
             
             <input type="submit" value="Edit Job" /> 
@@ -85,8 +86,18 @@
 
 {% if Profile: %}
     <h1>References:</h1>
-    {% if References %}
-        <button>Edit Reference</button> <button>Delete Reference</button> 
+    {% for reference in References %}
+    <br>
+        <form action="/edit_reference">
+                
+            <input type="submit" value="Edit Reference" /> 
+            <input type="hidden" name="referenceid" value={{reference.id}}>
+        </form>
+        <form action="/delete_reference">
+            <input type="submit" value="Delete Reference">
+            <input type="hidden" name="referenceid" value={{reference.id}}>
+        </form>
+
         <table style="width: 60%;" border="1"  cellpadding="3">
         <style> td, th {
         text-align: left;
@@ -94,22 +105,25 @@
         </style>
                 <tr> 
                     <th>Name:</th>
-                        <td></td>
+                        <td>{{reference.name}}</td>
                 </tr>
                 <tr>
                     <th>Phone:</th>
-                        <td></td>
+                        <td>{{reference.phoneNumber}}</td>
                 </tr>
                 <tr>
                     <th>Email:</th>
-                        <td></td>
+                        <td>{{reference.email}}</td>
                 </tr>
                 <tr>
                     <th>Organization:</th>
-                        <td></td>
+                        <td>{{reference.organization}}</td>
                 </tr>
         </table>
-    {% endif %}
-    <button>Add Reference</button>
+    {% endfor %}
+    <br>
+    <form action="/add_reference">
+        <input type="submit" value="Add Reference" />
+    </form>
 {% endif %}
 {% endblock %}

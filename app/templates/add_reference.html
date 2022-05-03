@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Add Reference</h2>
+    {% if errors: %}
+    <span style="color:red">{{errors}}</span>
+    {% endif %}
+    <form action="" method="post" novalidate>
+        {{referencesForm.hidden_tag() }}
+        <p>
+            {{ referencesForm.name.label }}<br>
+            {{ referencesForm.name(size=32) }}
+
+        </p>
+        <p>
+            {{ referencesForm.email.label }}<br>
+            {{ referencesForm.email(size=32) }}
+        </p>
+        <p>
+            {{ referencesForm.phoneNumber.label }}<br>
+            {{ referencesForm.phoneNumber(size=32) }}
+
+        </p>
+        <p>
+            {{ referencesForm.organization.label }}<br>
+            {{ referencesForm.organization(size=32) }}
+        </p>
+        <p>{{ referencesForm.submit() }}</p>
+    </form>
+{% endblock %}

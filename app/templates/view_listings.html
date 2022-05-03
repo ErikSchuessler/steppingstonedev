@@ -39,7 +39,23 @@
         <td>{{listing.description}}</td>
         <td>{{listing.benefits}}</td>
         <td>{{listing.salary}}</td>
-        <td><button style=>Apply for job</button></td>
+        <td> 
+            
+            
+            {% set found = namespace(total=0) %}
+            {% for application in Applications if (application.profileId == ProfileId and application.listingId == listing.id) %}
+                {% set found.total = 1 %}
+            {% endfor %}
+
+            {% if found.total == 0%}
+            <form action="/apply">
+                <input type="submit" value="Apply">
+                <input type="hidden" name="listingId" value={{listing.id}}>
+            {% else: %}
+                Applied
+            {% endif %}
+           
+        </form></td>
     </tr>
     {% endfor %}
 

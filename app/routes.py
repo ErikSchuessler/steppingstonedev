@@ -12,7 +12,7 @@ from app.forms import (
     ReferencesForm
 )
 from app import db
-from app.models import User, Listing, Profile, JobHistory, Reference
+from app.models import User, Listing, Profile, JobHistory, Reference, Application
 import sys
 
 @app.route('/')
@@ -77,18 +77,20 @@ def edit_profile():
 @app.route('/add_reference', methods=['GET','POST'])
 def add_reference():
     referencesForm = ReferencesForm()
-
+    userProfile = db.session.query(Profile).filter_by(userId = current_user.id).first()
+    
     if referencesForm.validate_on_submit():
+        profileId = userProfile.id
         name = referencesForm.name.data
         email = referencesForm.email.data
-        phoneNumber = phoneNumber.referencesForm.data
-        organization = organization.referencesForm.data
+        phoneNumber = referencesForm.phoneNumber.data
+        organization = referencesForm.organization.data
 
-        reference = Reference(profiledId=1, name=name, email=email, phoneNumber=phoneNumber, organization=organization)
-        db.session.add(profile)
+        reference = Reference(profileId=profileId, name=name, email=email, phoneNumber=phoneNumber, organization=organization)
+        db.session.add(reference)
         db.session.commit()
         return redirect(url_for('profile'))
-    return render_template('add_reference.html')
+    return render_template('add_reference.html', referencesForm=referencesForm)
 
 @app.route('/add_job_history', methods=['GET','POST'])
 def add_job_history():
@@ -145,6 +147,46 @@ def delete_job():
     db.session.delete(userJobHistory)
     db.session.commit()
     return redirect(url_for('profile'))
+
+@app.route('/edit_reference', methods=['GET', 'POST'])
+def edit_reference():
+    referencesForm=ReferencesForm()
+    userProfile = db.session.query(Profile).filter_by(userId = current_user.id).first()
+    print(referencesForm.id.data)
+    if referencesForm.validate_on_submit():
+        userReference = db.session.query(Reference).filter_by(id = referencesForm.id.data).first()
+        userReference.name = referencesForm.name.data
+        userReference.phoneNumber = referencesForm.phoneNumber.data
+        userReference.email = referencesForm.email.data
+        userReference.organization = referencesForm.organization.data 
+        db.session.commit()
+        return redirect(url_for('profile'))
+    else:
+        referenceId = request.args.get('referenceid')
+        userReference = db.session.query(Reference).filter_by(id = referenceId).first()
+        return render_template('edit_reference.html', referencesForm= ReferencesForm(), reference = userReference, profile = userProfile, errors = referencesForm.errors)
+
+@app.route('/delete_reference', methods=['GET', 'POST'])
+def delete_reference():
+    referenceId = request.args.get('referenceid')
+    userReference = db.session.query(Reference).filter_by(id = referenceId).first()
+    db.session.delete(userReference)
+    db.session.commit()
+    return redirect(url_for('profile'))
+
+@app.route('/apply', methods=['GET', 'POST'])
+def apply():
+    listingId = request.args.get('listingId')
+    print('*******************************************' + str(listingId))
+    profile = db.session.query(Profile).filter_by(userId = current_user.id).first()
+    print('*******************************************' + str(profile.id))
+    application = Application(profileId=profile.id, listingId=listingId)
+    db.session.add(application)
+    db.session.commit()
+    return redirect(url_for('view_listings'))
+
+
+
     
 @app.route('/add_listing', methods=['GET', 'POST'])
 def add_listing():
@@ -170,9 +212,11 @@ def add_listing():
 
 @app.route('/view_listings', methods=['GET', 'POST'])
 def view_listings():
-    all = db.session.query(Listing).all()
-    print(all, file=sys.stderr)
-    return render_template('view_listings.html', Listings=all)
+    allListings = db.session.query(Listing).all()
+    allApplications = db.session.query(Application).all()
+    profile = db.session.query(Profile).filter_by(userId = current_user.id).first()
+    print(allListings, file=sys.stderr)
+    return render_template('view_listings.html', Listings=allListings, Applications=allApplications, ProfileId = profile.id)
 
 @app.route('/registration')
 def register():

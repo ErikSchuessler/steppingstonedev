@@ -4,7 +4,9 @@ from app.models import Roles
 import sys
 
 
-""" db.drop_all()
+#db.drop_all()
+
+"""
 db.create_all()
 
 role1 = Roles(description='Student')
@@ -14,6 +16,7 @@ db.session.add(role1)
 db.session.add(role2)
 db.session.add(role3)
 """
+
 
 #use this and 'python3 main.py' at terminal to troubleshoot import errors
 #if __name__ == "__main__":
