@@ -19,6 +19,32 @@ import sys
 def hello():
     return render_template('homepage.html')
 
+def is_student():
+
+    # determines if authenticated user is a student user.
+
+    if current_user:
+        if current_user.role == 1:
+            return True
+        else:
+            return False
+    else:
+        print('User not authenticated.', file=sys.stderr)
+        return redirect(url_for('hello'))
+
+def is_business():
+
+    # determines if authenticated user is business user.
+
+    if current_user:
+        if current_user.role == 2:
+            return True
+        else:
+            return False
+    else:
+        print('User not authenticated.', file=sys.stderr)
+        return redirect(url_for('hello'))
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     # Authenticated users are redirected to home page.
@@ -42,6 +68,19 @@ def logout():
     logout_user()
     return redirect(url_for('hello'))
 
+
+@app.route('/view_profile/<profileId>')
+def view_profile(profileId):
+    
+    userProfile = db.session.query(Profile).filter_by(id=profileId).first()
+    user = db.session.query(User).filter_by(id=userProfile.userId).first()
+    if userProfile is None:
+        return render_template('error.html')
+    else:
+        userJobHistories = db.session.query(JobHistory).filter_by(profileId = userProfile.id).all()
+        userReferences = db.session.query(Reference).filter_by(profileId = userProfile.id).all()
+        return render_template('view_profile.html', Profile=userProfile, User = user, JobHistories = userJobHistories, References = userReferences)
+
 @app.route('/profile')
 def profile():
     userProfile = db.session.query(Profile).filter_by(userId = current_user.id).first()
@@ -51,6 +90,7 @@ def profile():
         userJobHistories = db.session.query(JobHistory).filter_by(profileId = userProfile.id).all()
         userReferences = db.session.query(Reference).filter_by(profileId = userProfile.id).all()
         return render_template('profile.html', Profile=userProfile, JobHistories = userJobHistories, References = userReferences)
+
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
@@ -184,31 +224,33 @@ def apply():
     db.session.add(application)
     db.session.commit()
     return redirect(url_for('view_listings'))
-
-
-
     
 @app.route('/add_listing', methods=['GET', 'POST'])
 def add_listing():
-    form = ListingForm()
-    if form.validate_on_submit():
-        streetAddress = form.streetAddress.data
-        city = form.city.data
-        state = form.state.data
-        zip = form.zip.data
-        positionTitle = form.positionTitle.data
-        qualifications = form.qualifications.data
-        isInternship = bool(form.isInternship.data)
-        isPartTime = bool(form.isPartTime.data)
-        description = form. description.data
-        benefits = form.benefits.data
-        salary = form.salary.data
+    if is_business():
+        form = ListingForm()
 
-        listing = Listing(businessId = 2, streetAddress=streetAddress, city=city, state=state, zip=zip, positionTitle=positionTitle, qualifications=qualifications, isInternship=isInternship, isPartTime=isPartTime, description=description, benefits=benefits, salary=salary)
-        db.session.add(listing)
-        db.session.commit()
-        return redirect(url_for('hello'))
-    return render_template('add_listing.html', form=form)
+        if form.validate_on_submit():
+            businessName = form.businessName.data
+            streetAddress = form.streetAddress.data
+            city = form.city.data
+            state = form.state.data
+            zip = form.zip.data
+            positionTitle = form.positionTitle.data
+            qualifications = form.qualifications.data
+            isInternship = bool(form.isInternship.data)
+            isPartTime = bool(form.isPartTime.data)
+            description = form. description.data
+            benefits = form.benefits.data
+            salary = form.salary.data
+
+            listing = Listing(businessId = current_user.id, businessName = businessName, streetAddress=streetAddress, city=city, state=state, zip=zip, positionTitle=positionTitle, qualifications=qualifications, isInternship=isInternship, isPartTime=isPartTime, description=description, benefits=benefits, salary=salary)
+            db.session.add(listing)
+            db.session.commit()
+            return redirect(url_for('hello'))
+        return render_template('add_listing.html', form=form)
+    else:
+        return render_template('unauthorized.html')
 
 @app.route('/view_listings', methods=['GET', 'POST'])
 def view_listings():
@@ -217,6 +259,14 @@ def view_listings():
     profile = db.session.query(Profile).filter_by(userId = current_user.id).first()
     print(allListings, file=sys.stderr)
     return render_template('view_listings.html', Listings=allListings, Applications=allApplications, ProfileId = profile.id)
+
+@app.route('/my_listings', methods=['GET', 'POST'])
+def my_listings():
+    myListings = db.session.query(Listing).filter_by(businessId = current_user.id).all()
+    allApplications = db.session.query(Application).all()
+    studentUsers = db.session.query(User).all()
+    allProfiles = db.session.query(Profile).all()
+    return render_template('my_listings.html', Listings=myListings, Applications=allApplications, StudentUsers = studentUsers, Profiles = allProfiles)
 
 @app.route('/registration')
 def register():
@@ -233,8 +283,12 @@ def student_registration():
         role = 1
         
         student = User(firstName=firstName, lastName=lastName, email=email, password=password, role=role)
-
         db.session.add(student)
+        db.session.commit()
+        db.session.refresh(student)
+        
+        profile = Profile(userId=student.id, phoneNumber='', contactEmail='', highSchool='', university='', introduction='')
+        db.session.add(profile)
         db.session.commit()
         return redirect(url_for('hello'))
     return render_template('student_registration.html', form=form)
@@ -247,7 +301,7 @@ def business_registration():
         lastName = form.lastName.data
         businessName = form.businessName.data
         email = form.email.data
-        password = form.password.data
+        password = generate_password_hash(form.password.data)
         role = 2
 
         business = User(firstName=firstName, lastName=lastName, businessName=businessName, email=email, password=password, role=role)

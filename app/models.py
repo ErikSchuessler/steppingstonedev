@@ -71,6 +71,7 @@ class Listing(db.Model):
     __tablename__='Listings'
     id = db.Column(db.Integer, primary_key=True)
     businessId = db.Column(db.Integer, ForeignKey('Users.id'), nullable=False)
+    businessName = db.Column(db.String(64), unique=False, nullable=False)
     streetAddress = db.Column(db.String(150), unique=False, nullable=False)
     city = db.Column(db.String(150), unique=False, nullable=False)
     state = db.Column(db.String(150), unique=False, nullable=False)

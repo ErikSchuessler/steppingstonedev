@@ -29,15 +29,30 @@
         <h1 style=color:black>Stepping Stone</h1>
         <h3 style=color:black>Connecting Students With Career Opportunities</h3>
         <hr>
+
+        {% if current_user.role == 1: %}
         <div>
-          <a href="/login">Login</a>
           <a href="/logout">Logout</a>
-          <a href="/registration">Registration</a>
           <a href="/search">Search</a>
           <a href="/view_listings">View Listings</a>
-          <a href="/add_listing">Add Listing</a>
           <a href="/profile">Profile</a>
         </div>
+
+        {% elif current_user.role == 2: %}
+        <div>
+          <a href="/logout">Logout</a>
+          <a href="/my_listings">My Listings</a>
+          <a href="/add_listing">Add Listing</a>
+        </div>
+
+        {% else %}
+        <div>
+          <a href="/login">Login</a>
+          <a href="/registration">Registration</a>
+        </div>
+        {% endif %}
+
+
         <hr>
         {% block content %}{% endblock %}
       </div>

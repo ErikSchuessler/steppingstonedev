@@ -5,6 +5,10 @@
     <form action="" method="post" novalidate>
         {{ form.hidden_tag() }}
         <p>
+            {{ form.businessName.label }}<br>
+            {{ form.businessName(size=32) }}
+        </p>
+        <p>
             {{ form.streetAddress.label }}<br>
             {{ form.streetAddress(size=32) }}
         </p>

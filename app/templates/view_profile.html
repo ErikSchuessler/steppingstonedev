@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>{{User.firstName}} {{User.lastName}}'s Profile:</h1>
+
+{% if Profile: %}   
+    <table style="width: 60%;" border="1" cellpadding="3">
+    <style> td, th {
+    text-align: left;
+    }
+    </style>
+    <tr>
+            <tr>
+                <th>Phone:</th>
+                    <td>{{Profile.phoneNumber}}</td>
+            </tr>
+                <tr> 
+                <th>Email:</th>
+                    <td>{{Profile.contactEmail}}</td>
+            </tr>
+            <tr>
+                <th>High School:</th>
+                    <td>{{Profile.highSchool}}</td>
+            </tr>
+            <tr>
+                <th>College/University:</th>
+                    <td>{{Profile.university}}</td>
+            </tr>
+            <tr>
+                <th>Description:</th>
+                    <td>{{Profile.introduction}}</td>
+            </tr>
+    </table>
+{% endif %}
+{% if Profile: %}
+    <h1>Job History:</h1>
+    {% for job in JobHistories %}
+            <table style="width: 60%;" border="1"  cellpadding="3">
+            <style> td, th {
+            text-align: left;
+            }
+            </style>
+                    <tr>
+                        <th>Position Title:</th>
+                            <td>{{job.title}}</td>
+                    </tr>
+                    <tr> 
+                        <th>Employer:</th>
+                            <td>{{job.companyName}}</td>
+                    </tr>
+                    <tr>
+                        <th>Start Date:</th>
+                            <td>{{job.startDate}}</td>
+                    </tr>
+                    <tr>
+                        <th>End Date:</th>
+                            <td>{{job.endDate}}</td>
+                    </tr>
+                    <tr>
+                        <th>Description:</th>
+                            <td>{{job.description}}</td>
+                    </tr>
+                <br>
+            </table>
+    {% endfor %}
+
+{% endif %}
+
+{% if Profile: %}
+    <h1>References:</h1>
+    {% for reference in References %}
+        <table style="width: 60%;" border="1"  cellpadding="3">
+        <style> td, th {
+        text-align: left;
+        }
+        </style>
+                <tr> 
+                    <th>Name:</th>
+                        <td>{{reference.name}}</td>
+                </tr>
+                <tr>
+                    <th>Phone:</th>
+                        <td>{{reference.phoneNumber}}</td>
+                </tr>
+                <tr>
+                    <th>Email:</th>
+                        <td>{{reference.email}}</td>
+                </tr>
+                <tr>
+                    <th>Organization:</th>
+                        <td>{{reference.organization}}</td>
+                </tr>
+        </table>
+    <br>
+    {% endfor %}
+<br>
+{% endif %}
+{% endblock %}

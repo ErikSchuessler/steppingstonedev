@@ -23,6 +23,7 @@ class BusinessRegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
 class ListingForm(FlaskForm):
+    businessName = StringField('Name of Business: ', validators=[DataRequired()])
     streetAddress = StringField('Street address: ', validators=[DataRequired()])
     city = StringField('City: ', validators=[DataRequired()])
     state = StringField('State: ', validators=[DataRequired()])
@@ -64,6 +65,14 @@ class ReferencesForm(FlaskForm):
     organization = StringField("Organization (Reference): ", validators=[DataRequired()])
 
     submit = SubmitField('Apply Changes')
+
+class SearchForm(FlaskForm):
+    id = IntegerField('Id')
+    businessName = StringField('Business Name: ')
+    city = StringField('City: ')
+    state = StringField('State: ')
+
+    submit = SubmitField('Search')
 
 
     

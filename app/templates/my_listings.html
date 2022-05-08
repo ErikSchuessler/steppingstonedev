@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
+<h1>My Listings:</h1>
+    {% for listing in Listings %}   
     <table style="width: 100%;" border="6" cellpadding="20">
     
     <tr>
@@ -13,9 +15,8 @@
         <th style="text-align:center">Description</th>
         <th style="text-align:center">Benefits</th>
         <th style="text-align:center">Salary</th>
-        <th style="text-align:center">Apply</th>
     </tr>
-    {% for listing in Listings %}
+    
     <tr>
         <td>{{listing.businessName}}</td>
         <td>{{listing.streetAddress}}<br>
@@ -39,26 +40,36 @@
         <td>{{listing.description}}</td>
         <td>{{listing.benefits}}</td>
         <td>{{listing.salary}}</td>
-        <td> 
-            
-            
-            {% set found = namespace(total=0) %}
-            {% for application in Applications if (application.profileId == ProfileId and application.listingId == listing.id) %}
-                {% set found.total = 1 %}
-            {% endfor %}
-
-            {% if found.total == 0%}
-            <form action="/apply">
-                <input type="submit" value="Apply">
-                <input type="hidden" name="listingId" value={{listing.id}}>
-            {% else: %}
-                Applied
-            {% endif %}
-           
-        </form></td>
     </tr>
+    <tr><th>Applicants for this listing:</th></tr>
+    
+    {% for application in Applications if (application.listingId == listing.id) %}
+   
+    {% set p = namespace(userId=0) %}
+    {% for profile in Profiles if (profile.id == application.profileId) %}
+        {% set p.userId = profile.userId %}
     {% endfor %}
 
+    {% set n = namespace(name="") %}
+    {% for user in StudentUsers if (user.id == p.userId) %}
+        {% set n.name = user.firstName + " " + user.lastName %}
+    {% endfor %}
+
+    <tr>
+        <td colspan="9">
+            <a href={{ url_for('view_profile', profileId = application.profileId)}}>
+                {{ n.name }}
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+    <br>
+    {% endfor %}
+
+  
+
     </table>
+
+
 			
 {% endblock %}
