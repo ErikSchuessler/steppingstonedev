@@ -5,14 +5,25 @@
 
 <h3>Query Search by Filters:</h3>
 
-<form action="/action_page.php">
-  <label for="fname">First name: </label>
-  <input type="text" id="fname" name="fname"><br><br>
-  <label for="lname">Last name: </label>
-  <input type="text" id="lname" name="lname"><br><br>
-  <input type="submit" value="Submit">
+<form action="" method="post" novalidate>
+  {{form.hidden_tag() }}
+  <p>
+      {{ form.businessName.label }}<br>
+      {{ form.businessName(size=32) }}
+
+  </p>
+  <p>
+      {{ form.city.label }}<br>
+      {{ form.city(size=32) }}
+  </p>
+  <p>
+      {{ form.state.label }}<br>
+      {{ form.state(size=32) }}
+
+  </p>
+  <p>{{ form.submit() }}</p>
 </form>
 
-<p>Click on the submit button to submit the form.</p>
+<p></p>
 
 {% endblock %}

@@ -9,7 +9,8 @@ from app.forms import (
     ListingForm, 
     ProfileForm, 
     JobHistoryForm, 
-    ReferencesForm
+    ReferencesForm,
+    SearchForm
 )
 from app import db
 from app.models import User, Listing, Profile, JobHistory, Reference, Application
@@ -67,6 +68,28 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('hello'))
+
+
+@app.route('/search', methods=['GET','POST'])
+def search():
+    form = SearchForm()
+    listings = db.session.query(Listing)
+    allApplications = db.session.query(Application).all()
+    profile = db.session.query(Profile).filter_by(userId = current_user.id).first()
+    if form.validate_on_submit():
+        if form.businessName.data:
+            listings = listings.filter_by(businessName = form.businessName.data)
+        if form.city.data:
+            listings = listings.filter_by(city = form.city.data)
+        if form.state.data:
+            listings = listings.filter_by(state = form.state.data)
+
+        results = listings.all()
+        if results:
+            return render_template('view_listings.html', Listings=results, Applications=allApplications, ProfileId = profile.id)
+        else:
+            return render_template('error.html')
+    return render_template('search.html', form=form)
 
 
 @app.route('/view_profile/<profileId>')
@@ -290,7 +313,7 @@ def student_registration():
         profile = Profile(userId=student.id, phoneNumber='', contactEmail='', highSchool='', university='', introduction='')
         db.session.add(profile)
         db.session.commit()
-        return redirect(url_for('hello'))
+        return redirect(url_for('login'))
     return render_template('student_registration.html', form=form)
 
 @app.route('/business_registration', methods=['GET', 'POST'])
@@ -307,7 +330,7 @@ def business_registration():
         business = User(firstName=firstName, lastName=lastName, businessName=businessName, email=email, password=password, role=role)
         db.session.add(business)
         db.session.commit()
-        return redirect(url_for('hello'))
+        return redirect(url_for('login'))
     return render_template('business_registration.html', form=form)
 
 

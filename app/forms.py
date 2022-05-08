@@ -48,7 +48,7 @@ class ProfileForm(FlaskForm):
     submit = SubmitField('Apply Changes')
 
 class JobHistoryForm(FlaskForm):
-    id = IntegerField('Id')
+    id = IntegerField("Job History Number:")
     title = StringField('Previous position title: ', validators=[DataRequired()])
     companyName = StringField('Previous employer name: ')
     startDate = DateField('Start Date: ')
@@ -67,7 +67,6 @@ class ReferencesForm(FlaskForm):
     submit = SubmitField('Apply Changes')
 
 class SearchForm(FlaskForm):
-    id = IntegerField('Id')
     businessName = StringField('Business Name: ')
     city = StringField('City: ')
     state = StringField('State: ')

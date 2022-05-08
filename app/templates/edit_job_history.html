@@ -3,16 +3,15 @@
 {% block content %}
     <h2>Edit Job History</h2>
     {% if errors: %}
-    <span style="color:red">{{errors}}</span>
+    <span style="color:red"></span>
     {% endif %}
     <form action="" method="post" novalidate>
         {{jobHistoryForm.hidden_tag() }}
         <p>
-            {{ jobHistoryForm.id.label }}<br>
             {% if job == None: %}
-                {{ jobHistoryForm.id(size=32) }}
+                {{ jobHistoryForm.id(size=32, readonly=true, class="disabled") }}
             {% else: %}
-                {{ jobHistoryForm.id(value=job.id) }}
+                {{ jobHistoryForm.id(value=job.id, readonly=true, class="disabled") }}
             {% endif %}
         </p>
         <p>
@@ -55,6 +54,7 @@
                 {{ jobHistoryForm.description(value=job.description) }}
             {% endif %}
         </p>
+        <br/>
         <p>{{ jobHistoryForm.submit() }}</p>
     </form>
 {% endblock %}

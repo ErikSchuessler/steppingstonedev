@@ -7,16 +7,13 @@
     {% endif %}
     <form action="" method="post" novalidate>
         {{ referencesForm.hidden_tag() }}
-
         <p>
-            {{ referencesForm.id.label }}<br>
             {% if reference == None: %}
-                {{ referencesForm.id(size=32) }}
+                {{ referencesForm.id(size=32, readonly=true, class="disabled") }}
             {% else: %}
-                {{ referencesForm.id(value=reference.id) }}
+                {{ referencesForm.id(value=reference.id, readonly=true, class="disabled") }}
             {% endif %}
         </p>
-
         <p>
             {{ referencesForm.name.label }}<br>
             {% if reference == None: %}
@@ -52,7 +49,7 @@
                 {{ referencesForm.organization(value=reference.organization) }}
             {% endif %}
         </p>
-
+        <br>
         <p>{{ referencesForm.submit() }}</p>
     </form>
 {% endblock %}
